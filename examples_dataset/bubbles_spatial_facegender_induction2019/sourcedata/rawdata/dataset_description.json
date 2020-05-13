@@ -1,12 +1,11 @@
-
 {
-    "Name": "",
+    "Name": "Bubbles",
     "BIDSVersion": "1.0.2",
     "License": "",
     "Authors": [
-        "",
-        "",
-        ""
+        "Faghel-Soubeyrand, S.",
+        "Dupuis-Roy, N.",
+        "Gosselin, F."
     ],
     "Acknowledgements": "",
     "HowToAcknowledge": "",
