@@ -1,0 +1,52 @@
+{
+	"DatasetNumber": "2",
+	"Name": "Gender Recognition_PsychBIDS",
+	"Authors": [
+		"Simon Faghel-Soubeyrand",
+		"Nicolas Dupuis-Royer",
+		"Frédéric Gosselin"
+	],
+	"NumberSubjects": "140",
+	"ExperimentType": "Behavioral",
+	"ResearchField":[
+		"Cognition",
+		"Vision"
+	],
+	"Keywords":[
+		"Face recognition",
+		"Visual representation",
+		"Individual differences"
+	],
+	"ReasearchSite": "University of Montreal",
+	"YearOfDataCollection":"2018",
+	"FullArticle": "https://psycnet.apa.org/record/2019-02013-001",
+	"HowToCite": "Cite article",
+	"Copyrights": "Open Source",
+	"CorrespondingAuthor": [
+		{
+			"Name": "Simon Faghel-Soubeyrand",
+			"Email": "simon.faghel-soubeyrand@umontreal.ca"
+		}
+	],
+
+	
+	"MoreInformation":[
+		{
+			"Funding":"Natural Sciences and Engineering Research Council of Canada"
+		},
+		{
+			"EthicsApprouvalCommittee":"Comité d'éthique de la recherche en arts et en sciences (CÉRAS)",
+			"YearOfApproval": "2018",
+			"University": "University of Montreal"
+
+		}
+	]
+}
+
+
+		
+	
+
+		
+
+
