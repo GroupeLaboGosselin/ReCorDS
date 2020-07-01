@@ -9,3 +9,5 @@ Folder should be as following : sub-01_task-bubbles_behavior.mat (for Faghel-Sou
 
 an example here from BIDS: 
 "sub-01_task-rest_eeg.edf"
+
+blablabla
