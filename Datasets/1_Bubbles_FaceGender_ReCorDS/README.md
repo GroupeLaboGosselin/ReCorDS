@@ -1,4 +1,4 @@
-# The Bubbles face induction study
+# The Bubbles Face Induction Study
 ## Description
 
 Face recognition ability varies tremendously among neurologically typical individuals. What causes these
