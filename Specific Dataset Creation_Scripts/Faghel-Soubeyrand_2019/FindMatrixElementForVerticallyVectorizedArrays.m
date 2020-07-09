@@ -16,7 +16,7 @@ for ii = 1: sizeMat(1)
         rowNumber = (n - completeColumns)*128;
         cell{ii,jj} = "" + rowNumber + "," + (completeColumns+1);
         else
-            cell{ii,jj} = NaN;
+            cell{ii,jj} = "NaN";
         end
         
         
