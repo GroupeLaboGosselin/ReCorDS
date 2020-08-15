@@ -1,8 +1,0 @@
-Participant 58: Bad performer
-Participant 59: Induction was out
-Participant 61: Bad performer
-Participant 67: Too many Bubbles during induction
-Participant 75: Only pre-induction data (no induction and no post-induction results)
-Participant 81: Bad performer
-Participant 131: No subject response for induction trials 415 to 500 
-

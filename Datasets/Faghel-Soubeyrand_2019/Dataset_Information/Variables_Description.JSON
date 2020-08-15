@@ -1,0 +1,111 @@
+{
+	"Gender":{
+		"Description": "Subject's gender",
+		"Levels": {
+			"F":"Female",
+			"M":"Male"
+		}
+	},
+
+	"Condition":{
+		"Description":"Experimentation condition",
+		"Levels":{
+			"1": "...",
+			"2": "...",
+			"3": "...",
+			"4": "...",
+			"999": "Unknown"
+		}
+	},
+
+	"KeyCondition": {
+		"Description": "Subject's key condition (either x and y for male and female or vice versa)",
+		"Levels":{
+			"0": "...",
+			"1": "..."	
+		}
+	},
+
+	"Lateralisation": {
+		"Description": "Handedness quotient (Edinburgh's lateralisation test)"
+	},
+
+	"GenderFace1": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
+		}
+	},
+
+	"Face1_nb": {
+		"Description": ""	
+	},
+
+	"Face2_nb": {
+		"Description": ""
+	},
+
+	"Right_left_flip": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
+		}
+	},
+
+	"Nb_Bubbles": {
+		"Description": ""	
+	},
+
+	"Overlap_Target": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
+		}
+	},
+
+	"Response": {
+		"Description": "",
+		"Levels":{
+			"120": "",
+			"122": ""	
+		}
+	},
+
+	"RT": {
+		"Description": ""	
+	},
+
+	"Accuracy": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
+		}
+	},
+
+	"Simi2Target": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
+		}
+	},
+
+	"Trial_Reward": {
+		"Description": ""	
+	},
+
+	"Bubbles_i": {
+		"Description": ""	
+	},
+
+	"Bubbles_j": {
+		"Description": ""	
+	}
+}
+
+
+	
