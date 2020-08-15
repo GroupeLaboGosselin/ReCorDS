@@ -1,4 +1,4 @@
-% Openjson5.m
+% Openjson.m
 % Opens JSON subject files and outputs a subject structure variable
 % Openjson(path,varargin)
 % path : path to the subject files (e.g.
@@ -9,7 +9,7 @@
 % string (e.g.{'001','004', '006','057','139'}). Must use single quote.
 % Valerie Daigneault (valerie.daigneault.2@umontreal.ca), 15/08/2020
 
-function subject = openjson5(path,varargin)
+function subject = openjson(path,varargin)
 cd(path);
 d = dir;
 narginchk(1,2);
