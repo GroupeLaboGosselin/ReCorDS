@@ -30,22 +30,80 @@
 		"Description": "Handedness quotient (Edinburgh's lateralisation test)"
 	},
 
-	"Accuracy_Bn": {
-		"Description": "Subject's accuracy for trial in block n",
+	"GenderFace1": {
+		"Description": "",
 		"Levels":{
-			"0": "Incorrect response",
-			"1": "Correct response"	
+			"0": "",
+			"1": ""	
 		}
 	},
 
-	"RT_Bn": {
-		"Description": "Subject's response time for trial in block n"	
+	"Face1_nb": {
+		"Description": ""	
+	},
+
+	"Face2_nb": {
+		"Description": ""
+	},
+
+	"Right_left_flip": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
 		}
 	},
 
-	"Bubbles": {
-		"Description": "Location of the bubble centers for each trial",
-		"Note":	"The 128x128 image is vectorized.Therefore, the given location is an element of a 1x16384 image vector"
+	"Nb_Bubbles": {
+		"Description": ""	
+	},
+
+	"Overlap_Target": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
+		}
+	},
+
+	"Response": {
+		"Description": "",
+		"Levels":{
+			"120": "",
+			"122": ""	
+		}
+	},
+
+	"RT": {
+		"Description": ""	
+	},
+
+	"Accuracy": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
+		}
+	},
+
+	"Simi2Target": {
+		"Description": "",
+		"Levels":{
+			"0": "",
+			"1": ""	
+		}
+	},
+
+	"Trial_Reward": {
+		"Description": ""	
+	},
+
+	"Bubbles_i": {
+		"Description": ""	
+	},
+
+	"Bubbles_j": {
+		"Description": ""	
 	}
 }
 
