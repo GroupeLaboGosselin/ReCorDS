@@ -1,0 +1,73 @@
+% get the appropriate directories : change the first (personal) one only.
+perso_dir         = fullfile('~/CharestLab');
+dataset_dir       = fullfile(perso_dir,'/ReCorDS/Datasets/Faghel-Soubeyrand_2019');
+utils_dir         = fullfile(perso_dir,'/ReCorDS/ReCorDS_functions');
+stim_creat_dir    = fullfile(dataset_dir,'/Stimuli_information/stimuli_recreation');
+
+cd(stim_creat_dir); % cd to appropriate path
+addpath(utils_dir)  % add useful functions
+
+dataset   = dir(fullfile(dataset_dir,'*/*.json')); % list all .json files exactly one directory under "dataset_dir" folder
+
+sub_dir   = fullfile(dataset(sub).folder,dataset(sub).name);
+% openjson open the subjects' files is really not optimal. I've done the
+% same work in about more than 10 times less code,using only matlab
+% built-in functions.
+% openjson(sub_dir) is now depricated.
+subj_datajsondecode(fileread(sub_dir))
+
+
+
+
+     filename = sprintf("simon_exp_%s_%d_%d_%d.mat",subName,jj,subCondition,subKeyCondition);
+        if fopen(filename) == -1
+            disp(sprintf("Could not open %s",filename));
+            continue
+        end
+        load(filename);
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % Initialize vectors and matrices
+        nTrials     = size(cid.data, 2);
+        X           = zeros(nTrials, sizeX^2);
+        y           = zeros(1, nTrials);
+        % Random Seed
+        temp        = sscanf(cid.noise, '%s%s%s%s%d');
+        seed_0      = temp(end);
+        rand('state', seed_0); 
+        
+        for trial = 1:nTrials
+        % Creation de bruit
+            qteBulles = cid.data(5,trial);
+            [mask_center,~]=get_mask(qteBulles,masque);
+            X(trial,:) = logical(mask_center(:));  
+      % Some participants had 1 OR 0 bubbles,  made NAN when divided by 0 
+            if find(isnan(X(trial,:)))
+                X(trial,:)=zeros(1,sizeX*sizeX);
+            end
+        end
+        
+        
+        
+%% Get bubbles apertures function
+
+sizeX    = 128;
+masque2D = double(imread('masque.tif'));
+masque   = masque2D(:);
+
+function [bubbles_center,masque2D] = get_mask(nb_bubbles,masque)
+
+% Bulles
+sigma       = 3;
+TNoyau      = 6*sigma;
+bulle       = fspecial('gaussian',ceil(TNoyau),sigma);
+bulle       = bulle - min(bulle(:));
+bulle       = bulle /sum(bulle(:));
+
+
+prob_tmp = nb_bubbles/sum(masque(:)); % the probability of having a bubble at a specific position the mask for this given trial
+tmp=rand(128^2,1) .* masque(:);
+bubbles_center=reshape(tmp>=(1-prob_tmp),128,128); % makes the criteria probabilistic :every position with  >=prob_temp gets a bubble.
+masque2D=filter2(bulle,tmp); % convolve these position centers with a gaussian apertures, or bubbles.
+masque2D = (masque2D - min(masque2D(:)))/(max(masque2D(:)) - min(masque2D(:))); % make it range from 0 to 1.
+
+end

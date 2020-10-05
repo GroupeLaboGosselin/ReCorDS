@@ -37,7 +37,7 @@ end
 for ii = 1: length(files)
     sub = files{ii};
     if isempty(strfind(path, "\")) 
-        cd(path + "/Subject_" + sub);
+        cd(path + "/Subject_" + sub); % this is really not optimal. Use fullfile instead.
     else 
         cd(path + "\Subject_" + sub); 
     end
