@@ -48,9 +48,7 @@ for ii = 1:140
                
                for ww = 1 : length(nZerosIndx)
                    imIndx = colonne(ww);
-                   temp = imIndx/128;
-                   imi = (temp - floor(temp))*128;
-                   imj = ceil(temp);
+                   [imi imj] = ind2sub([128 128], imIndx);
                    tempmati(ww) = imi;
                    tempmatj(ww) = imj; 
                end
