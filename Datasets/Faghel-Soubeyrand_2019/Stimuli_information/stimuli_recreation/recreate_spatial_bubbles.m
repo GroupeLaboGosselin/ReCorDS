@@ -7,7 +7,6 @@ stim_creat_dir    = fullfile(dataset_dir,'/Stimuli_information/stimuli_recreatio
 cd(stim_creat_dir); % cd to appropriate path
 addpath(utils_dir)  % add useful functions
 
-
 % this contains all the datasets` json files name, and folder, etc.
 dataset   = dir(fullfile(dataset_dir,'*/*.json')); % list all .json files exactly one directory under "dataset_dir" folder
 
@@ -17,7 +16,7 @@ img_size=[128,128];
 sigma=3;
 bubble = get_bubble(sigma);
 
-for sub=1%:nsubjects
+for sub=1:2 %:nsubjects
     sub_dir   = fullfile(dataset(sub).folder,dataset(sub).name);
     % openjson open the subjects' files is really not optimal. I've done the
     % same work in about more than 10 times less code,using only matlab
