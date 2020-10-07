@@ -1,4 +1,6 @@
-%% Variables
+%% create .txt files from the .mat files containing bubbles center position (in X and Y).
+
+% initialize the paths. Make them as GENERAL as possible. 
 % get the appropriate directories : change the first (personal) one only.
 perso_dir         = fullfile('~/CharestLab');
 dataset_dir       = fullfile(perso_dir,'/ReCorDS/Datasets/Faghel-Soubeyrand_2019');
@@ -26,7 +28,7 @@ masque   = masque2D(:);
 
 
 %% Finds Bubble centers for every participant
-for subject = 1 : nbSubjects
+for subject = 75 : nbSubjects
     sub_fold = fullfile(output_dir,'/',sprintf('Subject_%03d',subject));
     mkdir(sub_fold)
     disp(sprintf('Subject_%03d ...',subject))
@@ -73,6 +75,7 @@ for subject = 1 : nbSubjects
     ntrialtemp=500;
     
     condition=subjects{subject}{2};
+    if condition~=999
     for block  = 1 : 5
         X = make_bubbles_masks(raw_dataset_dir,subject,condition,block,masque);
         InductionMat(((100*(block-1))+1): block*100, :) = X; 
@@ -95,6 +98,7 @@ for subject = 1 : nbSubjects
     
     fname    = fullfile(sub_fold,sprintf("Bubbles_Induction_%d.txt",subject));
     writecell(tsvCell,fname,'Delimiter', 'tab');
+    
     
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     % % % % % % % % % % %  Post-Induction  % % % % % % % % % % % 
@@ -121,7 +125,7 @@ for subject = 1 : nbSubjects
 
     fname    = fullfile(sub_fold,sprintf("Bubbles_Post-Induction_%d.txt",subject));
     writecell(tsvCell,fname,'Delimiter', 'tab');
-    
+    end
      % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     fclose('all');
 end
