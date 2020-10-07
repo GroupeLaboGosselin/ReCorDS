@@ -7,5 +7,5 @@ function bulle = get_bubble(sigma)
 
 maxHalfSize = 6*sigma;
 [y,x] = meshgrid(-maxHalfSize:maxHalfSize,-maxHalfSize:maxHalfSize);
-bulle = exp(-(x.^2/stdev^2)-(y.^2/stdev^2));
+bulle = exp(-(x.^2/sigma^2)-(y.^2/sigma^2));
 end

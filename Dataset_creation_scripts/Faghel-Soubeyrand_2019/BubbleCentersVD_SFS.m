@@ -1,4 +1,11 @@
-%% Variables
+%% script to create .txt files from the .mat files containing bubbles center position (in X and Y). 
+% 
+%
+%
+%
+
+
+% initialize the paths. Make them as GENERAL as possible. 
 % get the appropriate directories : change the first (personal) one only.
 perso_dir         = fullfile('~/CharestLab');
 dataset_dir       = fullfile(perso_dir,'/ReCorDS/Datasets/Faghel-Soubeyrand_2019');
@@ -29,7 +36,7 @@ masque   = masque2D(:);
 for subject = 1 : nbSubjects
     sub_fold = fullfile(output_dir,'/',sprintf('Subject_%03d',subject));
     mkdir(sub_fold)
-    disp(sprintf('Subject_%03d ...',subject))
+    fprintf('Subject_%03d ...\n',subject)
     
     PreInductionMat = zeros(300,sizeX*sizeX);
     InductionMat = zeros(500,sizeX*sizeX);
@@ -73,6 +80,7 @@ for subject = 1 : nbSubjects
     ntrialtemp=500;
     
     condition=subjects{subject}{2};
+    if condition~=999
     for block  = 1 : 5
         X = make_bubbles_masks(raw_dataset_dir,subject,condition,block,masque);
         InductionMat(((100*(block-1))+1): block*100, :) = X; 
@@ -83,7 +91,7 @@ for subject = 1 : nbSubjects
     
 
     %Write TSV file
-    [a b] = size(finIndmat);
+    [a ~] = size(finIndmat);
     tsvMat = zeros(a+1, ntrialtemp);
     tsvMat(2:a+1,:) = finIndmat;
     tsvCell = num2cell(tsvMat);
@@ -95,6 +103,7 @@ for subject = 1 : nbSubjects
     
     fname    = fullfile(sub_fold,sprintf("Bubbles_Induction_%d.txt",subject));
     writecell(tsvCell,fname,'Delimiter', 'tab');
+    
     
     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     % % % % % % % % % % %  Post-Induction  % % % % % % % % % % % 
@@ -111,7 +120,7 @@ for subject = 1 : nbSubjects
     finPosmat=reformat_indxs(PostInductionMat);
 
     %Write TSV file
-    [a b] = size(finPosmat);
+    [a ~] = size(finPosmat);
     tsvMat = zeros(a+1, ntrialtemp);
     tsvMat(2:a+1,:) = finPosmat;
     tsvCell = num2cell(tsvMat);
@@ -121,7 +130,7 @@ for subject = 1 : nbSubjects
 
     fname    = fullfile(sub_fold,sprintf("Bubbles_Post-Induction_%d.txt",subject));
     writecell(tsvCell,fname,'Delimiter', 'tab');
-    
+    end
      % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     fclose('all');
 end
