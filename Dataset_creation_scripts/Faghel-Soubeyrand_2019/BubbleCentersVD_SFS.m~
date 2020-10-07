@@ -29,23 +29,18 @@ masque   = masque2D(:);
 for subject = 1 : nbSubjects
     sub_fold = fullfile(output_dir,'/',sprintf('Subject_%03d',subject));
     mkdir(sub_fold)
-    disp(sprintf('Subject_%03d ...',subject))
+    disp(sprintf('Subject_%03d',subject))
+    
     
     PreInductionMat = zeros(300,sizeX*sizeX);
     InductionMat = zeros(500,sizeX*sizeX);
     PostInductionMat = zeros(300,sizeX*sizeX);
     finPosmat = [];
-    finPremat = [];
-    finIndmat = [];
     
-    % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-    % % % % % % % % % % %  Pre-Induction  % % % % % % % % % % % 
-    % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     
+    %Pre-Induction
     ntrialtemp=300;
-    
 %   cd("C:\Users\valer\OneDrive\Documents\Laboratoire vision\PSY3009\Simon_2019\gender_learn_data");
-
     condition=7;
     for block = 1 : 3
         X = make_bubbles_masks(raw_dataset_dir,subject,condition,block,masque);
@@ -63,13 +58,14 @@ for subject = 1 : nbSubjects
         tsvCell{1,trial} = sprintf("Trial_%d",trial);
     end
     % get, or create a subject's folder, with the appropreate file name.
+    
     fname    = fullfile(sub_fold,sprintf("Bubbles_Pre-Induction_%d.txt",subject));
 %    cd("C:\Users\valer\OneDrive\Documents\Laboratoire vision\PSY3009\2_Gender Recognition_PsychBids" + "\Subject_" + subject);
     writecell(tsvCell,fname,'Delimiter', 'tab');
     
-    % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-    % % % % % % % % % % %  Induction  % % % % % % % % % % % 
-    % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+    
+    
+    % Induction
     ntrialtemp=500;
     
     condition=subjects{subject}{2};
@@ -96,16 +92,12 @@ for subject = 1 : nbSubjects
     fname    = fullfile(sub_fold,sprintf("Bubbles_Induction_%d.txt",subject));
     writecell(tsvCell,fname,'Delimiter', 'tab');
     
-    % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     % % % % % % % % % % %  Post-Induction  % % % % % % % % % % % 
-    % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
     condition=7;
     ntrialtemp=300;
-    counter=0;
     for block = 4 : 6
-        counter=counter+1;
         X = make_bubbles_masks(raw_dataset_dir,subject,condition,block,masque);
-        PostInductionMat(((100*(counter-1))+1): counter*100, :) = X; 
+        PostInductionMat(((100*(block-1))+1): block*100, :) = X; 
     end
     
     finPosmat=reformat_indxs(PostInductionMat);
@@ -122,7 +114,9 @@ for subject = 1 : nbSubjects
     fname    = fullfile(sub_fold,sprintf("Bubbles_Post-Induction_%d.txt",subject));
     writecell(tsvCell,fname,'Delimiter', 'tab');
     
-     % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+     % % % % % % % % % % % % % % % % % % % % % %   % % % % % % % % % % % 
+    
+    disp(subject);
     fclose('all');
 end
 
