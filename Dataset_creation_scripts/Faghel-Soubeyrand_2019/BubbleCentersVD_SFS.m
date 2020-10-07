@@ -1,4 +1,9 @@
-%% create .txt files from the .mat files containing bubbles center position (in X and Y).
+%% script to create .txt files from the .mat files containing bubbles center position (in X and Y). 
+% 
+%
+%
+%
+
 
 % initialize the paths. Make them as GENERAL as possible. 
 % get the appropriate directories : change the first (personal) one only.
@@ -28,10 +33,10 @@ masque   = masque2D(:);
 
 
 %% Finds Bubble centers for every participant
-for subject = 75 : nbSubjects
+for subject = 1 : nbSubjects
     sub_fold = fullfile(output_dir,'/',sprintf('Subject_%03d',subject));
     mkdir(sub_fold)
-    disp(sprintf('Subject_%03d ...',subject))
+    fprintf('Subject_%03d ...\n',subject)
     
     PreInductionMat = zeros(300,sizeX*sizeX);
     InductionMat = zeros(500,sizeX*sizeX);
@@ -86,7 +91,7 @@ for subject = 75 : nbSubjects
     
 
     %Write TSV file
-    [a b] = size(finIndmat);
+    [a ~] = size(finIndmat);
     tsvMat = zeros(a+1, ntrialtemp);
     tsvMat(2:a+1,:) = finIndmat;
     tsvCell = num2cell(tsvMat);
@@ -115,7 +120,7 @@ for subject = 75 : nbSubjects
     finPosmat=reformat_indxs(PostInductionMat);
 
     %Write TSV file
-    [a b] = size(finPosmat);
+    [a ~] = size(finPosmat);
     tsvMat = zeros(a+1, ntrialtemp);
     tsvMat(2:a+1,:) = finPosmat;
     tsvCell = num2cell(tsvMat);
