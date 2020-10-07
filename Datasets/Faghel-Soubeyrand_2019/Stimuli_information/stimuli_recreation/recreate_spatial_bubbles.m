@@ -16,7 +16,7 @@ img_size=[128,128];
 sigma=3;
 bubble = get_bubble(sigma);
 %%
-for sub=1:2 %:nsubjects
+for sub=1 %:nsubjects
     sub_dir   = fullfile(dataset(sub).folder,dataset(sub).name);
     % openjson open the subjects' files is really not optimal. I've done the
     % same work in about more than 10 times less code,using only matlab
@@ -34,8 +34,8 @@ for sub=1:2 %:nsubjects
         i_ind=subj_data.PreInduction.Bubbles_i{trial}; % problem with the indices here!
         j_ind=subj_data.PreInduction.Bubbles_j{trial};
          for bub=1:length(j_ind)
-             i_indx=bubs_posit.subject(sub).PreInduction.Bubbles_i{trial}(bub);
-             j_indx=bubs_posit.subject(sub).PreInduction.Bubbles_j{trial}(bub);
+             i_indx=subj_data.PreInduction.Bubbles_i{trial}(bub);
+             j_indx=subj_data.PreInduction.Bubbles_j{trial}(bub);
              tmp_mask(i_indx,j_indx)=1;
           end
         
@@ -44,13 +44,6 @@ for sub=1:2 %:nsubjects
         masque2D=filter2(bubble,tmp_mask);
         masque2D = min(max(masque2D, 0), 1); % this is better
         
-       
-        
-    mask=zeros(sizeX,sizeX,3);
-    prob_tmp = qteBulles/sum(masque(:));
-	tmp=rand(sizeX^2,1) .* masque(:);
-	tmp=reshape(tmp>=(1-prob_tmp),sizeX,sizeX); % makes the criteria probabilistic
-    masque2D=filter2(bulle,tmp);
 % 	masque2D= repmat(masque2D,[1 1 3]);% was repmat(masque2D, 1, 1, 3)
     end
     figure, subplot(1,2,1),imshow(tmp_mask),title('bubbles center, supposedly')
