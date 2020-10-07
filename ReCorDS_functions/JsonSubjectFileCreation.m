@@ -12,10 +12,15 @@ filename = "DataBehavior_";
 structure = nameOfStructureVariable;
 
 for ii = 1: nbSubjects
-     % Uncomment if new folders for subjects have not been made
-%     mkdir("C:\Users\valer\Documents\GitHub\ReCorDS\Datasets\Faghel-Soubeyrand_2019", "Subject_" +ii);
     
-    cd(mainDir + "Subject_" + ii);
+   sub = ii;
+   for jj = 1:strlength("" + nbSubjects)-strlength(""+ii)
+       sub = "0"+ sub;
+   end
+     % Uncomment if new folders for subjects have not been made
+%     mkdir("C:\Users\valer\Documents\GitHub\ReCorDS\Datasets\Faghel-Soubeyrand_2019", "Subject_" + sub);
+    
+    cd(mainDir + "Subject_" + sub);
     id = fopen(filename+ ii + ".json", 'w');
     fprintf(id, '%s', jsonencode(structure(ii)));
     fclose(id); 
