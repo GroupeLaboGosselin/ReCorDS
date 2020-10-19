@@ -21,8 +21,8 @@
 	"KeyCondition": {
 		"Description": "Subject's key condition (either x and y for male and female or vice versa)",
 		"Levels":{
-			"0": "...",
-			"1": "..."	
+			"0": "x for male",
+			"1": "y for male"	
 		}
 	},
 
@@ -33,8 +33,8 @@
 	"GenderFace1": {
 		"Description": "",
 		"Levels":{
-			"0": "",
-			"1": ""	
+			"0": "female",
+			"1": "male"	
 		}
 	},
 

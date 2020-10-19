@@ -3,6 +3,7 @@ perso_dir         = fullfile('~/CharestLab');
 dataset_dir       = fullfile(perso_dir,'/ReCorDS/Datasets/Faghel-Soubeyrand_2019');
 utils_dir         = fullfile(perso_dir,'/ReCorDS/ReCorDS_functions');
 stim_creat_dir    = fullfile(dataset_dir,'/Stimuli_information/stimuli_recreation');
+analy_dir    = fullfile(dataset_dir,'/Stimuli_information/analysis_recreation');
 
 cd(stim_creat_dir); % cd to appropriate path
 addpath(utils_dir)  % add useful functions
@@ -16,7 +17,7 @@ img_size=[128,128];
 sigma=3;
 bubble = get_bubble(sigma);
 %%
-for sub=1:nsubjects
+for sub=1%:nsubjects
     sub_dir   = fullfile(dataset(sub).folder,dataset(sub).name);
     % openjson open the subjects' files is really not optimal. I've done the
     % same work in about more than 10 times less code,using only matlab
@@ -46,9 +47,10 @@ for sub=1:nsubjects
         
 % 	masque2D= repmat(masque2D,[1 1 3]);% was repmat(masque2D, 1, 1, 3)
     end
-%     figure, subplot(1,2,1),imshow(tmp_mask),title('bubbles center, supposedly')
-%     subplot(1,2,2), imshow(uint8(masque2D*255)),title('bubbles mask, supposedly')
+   
 end
+ figure, subplot(1,2,1),imshow(tmp_mask),title('bubbles center, supposedly')
+ subplot(1,2,2), imshow(uint8(masque2D*255)),title('bubbles mask, supposedly')
 %% Get bubbles apertures function
 
 % sizeX    = 128;
