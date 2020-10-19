@@ -77,9 +77,7 @@ for sub=1:nsubjects
    
 end
 
-
-% average, smooth, and z-score the CIs using permuted CIs
-ci=nanmean(cis_all);
+ci=nanmean(cis_all)/(nsubjects);
 sci=reshape(ci,img_size);
 sci=SmoothCi(sci,8);
 
@@ -89,8 +87,6 @@ sci_boot=SmoothCi(sci_boot,8);
 
 zci=(sci-nanmean(sci_boot(:)))/nanstd(sci_boot(:));
 
-% show the resulting CI, indicating which features are usefull for face-sex
-% categorisation.
 range_ci=[3 23];
 
 [ci_show, thresholded] = overlay_pixel(face_show,zci,15);
