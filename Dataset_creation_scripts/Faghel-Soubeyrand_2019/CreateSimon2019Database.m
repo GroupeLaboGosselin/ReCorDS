@@ -100,7 +100,7 @@ for ii = 1 : nbParticipants
     end
     
     
-    %Creates Results_Post-Induction_x.csv file
+    % Creates Results_Post-Induction_x.csv file
     
         if nbMissingFiles < 3
             cd("C:\Users\valer\OneDrive\Documents\Laboratoire vision\PSY3009\Simon_2019\gender_learn_data");

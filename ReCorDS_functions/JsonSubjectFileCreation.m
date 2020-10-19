@@ -13,6 +13,10 @@ structure = nameOfStructureVariable;
 
 for ii = 1: nbSubjects
     
+    
+%     sub_fold = fullfile(output_dir,'/',sprintf('Subject_%03d',subject));
+%     mkdir(sub_fold)
+%  fprintf('Subject_%03d ...\n',subject)
    sub = ii;
    for jj = 1:strlength("" + nbSubjects)-strlength(""+ii)
        sub = "0"+ sub;
@@ -20,7 +24,7 @@ for ii = 1: nbSubjects
      % Uncomment if new folders for subjects have not been made
 %     mkdir("C:\Users\valer\Documents\GitHub\ReCorDS\Datasets\Faghel-Soubeyrand_2019", "Subject_" + sub);
     
-    cd(mainDir + "Subject_" + sub);
+    cd(mainDir + "Subject_" + sub); % this is not good practice at all. Doing so you change directory EVERYTIME! It's
     id = fopen(filename+ ii + ".json", 'w');
     fprintf(id, '%s', jsonencode(structure(ii)));
     fclose(id); 

@@ -2,8 +2,6 @@
 % 
 %
 %
-%
-
 
 % initialize the paths. Make them as GENERAL as possible. 
 % get the appropriate directories : change the first (personal) one only.
