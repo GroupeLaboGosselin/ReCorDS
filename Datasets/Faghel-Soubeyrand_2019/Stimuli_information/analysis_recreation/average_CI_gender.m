@@ -46,7 +46,7 @@ for sub=1:nsubjects
     
     ntrials=length(subj_data.PreInduction.Bubbles_i);
 
-     phase_masks=zeros(ntrials,img_size(1),img_size(2));
+    phase_masks=zeros(ntrials,img_size(1),img_size(2));
     % test with PreInduction trials
     for trial=1:ntrials
         
@@ -57,7 +57,6 @@ for sub=1:nsubjects
              j_indx=subj_data.PreInduction.Bubbles_j{trial}(bub);
              phase_masks(trial,i_indx,j_indx)=true;
          end
- 
     end
     
     % we z-score accuracies and bubbles masks across trials(2nd z-scoring is not much
