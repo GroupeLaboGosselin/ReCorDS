@@ -1,6 +1,6 @@
 %% declaration variables
 
-pathRawData = "C:\Users\andre\Desktop\Bacc Neuro\ProjetRecherche\records\simon_exp_modData";
+pathRawData = fullfile("C:\Users\andre\Desktop\Bacc Neuro\ProjetRecherche\recordsTemp\simon_exp_modData");
 rawDataName = "simon_mod";
 
 expName = "Faghel_Soubeyrand_2019";
