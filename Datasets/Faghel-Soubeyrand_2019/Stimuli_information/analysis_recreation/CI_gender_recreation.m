@@ -18,8 +18,14 @@ analy_dir    = fullfile(dataset_dir,'/Stimuli_information/analysis_recreation');
 cd(analy_dir); % cd to appropriate path
 addpath(utils_dir)  % add useful functions
 
+
+% change this for your path. this should in fact be added inside the
+% repository, on github (should be user general).
+simon_dir = '/home/adf/faghelss/Downloads/records/simon_exp_modData/json';
+
+
 % this contains all the datasets` json files name, and folder, etc.
-dataset   = dir(fullfile(dataset_dir,'*/*.json')); % list all .json files exactly one directory under "dataset_dir" folder
+dataset   = dir(fullfile(simon_dir,'*.json')); %dir(fullfile(dataset_dir,'*/*.json')); % list all .json files exactly one directory under "dataset_dir" folder
 nsubjects=length(dataset);
 img_size=[128,128];
 
@@ -30,7 +36,7 @@ face_file=fullfile(stims(stim).folder,stims(stim).name);
 face_show=double(imread(face_file))/255;
 face_show=squeeze(face_show(:,:,1));
 
-%%
+%% computes the classification images 
 
 cis_all=zeros(nsubjects,img_size(1),img_size(2));
 cis_all_boot=zeros(nsubjects,img_size(1),img_size(2));
@@ -38,31 +44,24 @@ cis_all_boot=zeros(nsubjects,img_size(1),img_size(2));
 for sub=1:nsubjects
     disp("subject "+ num2str(sub))
     sub_dir   = fullfile(dataset(sub).folder,dataset(sub).name);
-    % Simon F.S. : openjson open the subjects' files is really not optimal. I've done the
+    % Simon F.S. (november 2020) : openjson open the subjects' files is really not optimal. I've done the
     % same work in about 10 times less code,using only matlab
     % built-in functions.
     % openjson(sub_dir) is now depricated.
     subj_data=jsondecode(fileread(sub_dir));
     
-    ntrials=length(subj_data.PreInduction.Bubbles_i);
+    ntrials=length(subj_data.PreInduction.X.i);%subj_data.PreInduction.X.i{1}
 
-    phase_masks=zeros(ntrials,img_size(1),img_size(2));
+    phase_masks=zeros(ntrials,img_size(1)*img_size(2));
     % test with PreInduction trials
     for trial=1:ntrials
-        
-        i_ind=subj_data.PreInduction.Bubbles_i{trial}; % problem with the indices here!
-        j_ind=subj_data.PreInduction.Bubbles_j{trial};
-         for bub=1:length(j_ind)
-             i_indx=subj_data.PreInduction.Bubbles_i{trial}(bub);
-             j_indx=subj_data.PreInduction.Bubbles_j{trial}(bub);
-             phase_masks(trial,i_indx,j_indx)=true;
-         end
+        phase_masks(trial,subj_data.PreInduction.X.i{trial})=true;    
     end
     
     % we z-score accuracies and bubbles masks across trials(2nd z-scoring is not much
     % needed, but that's what we did).
     zphase_masks=zscore(phase_masks(:,:));
-    zacc=zscore(subj_data.PreInduction.Accuracy);
+    zacc=zscore(subj_data.PreInduction.dependentVariables.accuracy);
     
     ci=zphase_masks(:,:)'*zacc;
     cis_all(sub,:)=ci(:);

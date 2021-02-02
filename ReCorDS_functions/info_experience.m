@@ -1,17 +1,20 @@
+
+function exp = info_experience(pathRawData)
 %% declaration variables
 
-pathRawData = fullfile("C:\Users\andre\Desktop\Bacc Neuro\ProjetRecherche\recordsTemp\simon_exp_modData");
-rawDataName = "simon_mod";
+exp.rawDataName = "simon_mod";
+exp.pathRawData = pathRawData;
 
-expName = "Faghel_Soubeyrand_2019";
+exp.expName = "Faghel_Soubeyrand_2019";
 
-conditions = {'PreInduction', 'Induction', 'PostInduction'};
-subjInfo = {'SubjectID','Condition','KeyCondition','Lateralisation','Gender'};
-indVars = {'gender_face1','face1_nb','face2_nb','right_left_flip','nb_bubbles','overlap_target'};
-depVars = {'response','RT','accuracy','simi2target','trial_reward'};
-Bubbles = {};
+exp.conditions = {'PreInduction', 'Induction', 'PostInduction'};
+exp.subjInfo = {'SubjectID','Condition','KeyCondition','Lateralisation','Gender'};
+exp.indVars = {'gender_face1','face1_nb','face2_nb','right_left_flip','nb_bubbles','overlap_target'};
+exp.depVars = {'response','RT','accuracy','simi2target','trial_reward'};
+exp.Bubbles = {};
 
-jsonDataName = "DataBehavior";
+exp.jsonDataName = "DataBehavior";
 
-sizeX = 128;
-sizeY = sizeX;
+exp.sizeX = 128;
+exp.sizeY = exp.sizeX;
+end
