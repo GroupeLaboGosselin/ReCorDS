@@ -1,29 +1,36 @@
-%% Experience conditions
-info_experience;
+function recordsData = json_to_struct
+tic
+%% Importation condition experience
+andrew = fullfile("C:\Users\andre\Desktop\Bacc Neuro\ProjetRecherche\recordsTemp\simon_exp_modData");
+simon = fullfile('/home/adf/faghelss/Downloads/records/simon_exp_modData');
+
+pathRawData = andrew;
+
+exp = info_experience(pathRawData);
 
 %% creation variables
-nameExperience = genvarname(expName);
+nameExperience = genvarname(exp.expName);
 
-nbCondition = size(conditions,2);
-fieldNamesConditions = genvarname(conditions);
+nbCondition = size(exp.conditions,2);
+fieldNamesConditions = genvarname(exp.conditions);
 
-nbSubjInfo = size(subjInfo,2);
-fieldNamesSubjInfo = genvarname(subjInfo);
+% % nbSubjInfo = size(subjInfo,2);
+% % fieldNamesSubjInfo = genvarname(experience.subjInfo);
 
-nbIndVars = size(indVars,2);
-fieldNamesIndVars = genvarname(indVars);
+nbIndVars = size(exp.indVars,2);
+fieldNamesIndVars = genvarname(exp.indVars);
 
-nbDepVars = size(depVars,2);
-fieldNamesDepVars = genvarname(depVars);
+nbDepVars = size(exp.depVars,2);
+fieldNamesDepVars = genvarname(exp.depVars);
 
-nbBubbles = size(Bubbles,2);
-fieldNamesBubbles = genvarname(Bubbles);
+nbBubbles = size(exp.bubbles,2);
+fieldNamesBubbles = genvarname(exp.bubbles);
 
 %% Demographie
 subjects = info_subjects;
 nbSubjects = length(subjects);
 
-pathJsonData = pathRawData+fullfile("/json");
+pathJsonData = exp.pathRawData+fullfile("/json");
 if ~exist(pathJsonData, 'dir')
     msgbox('json files do not exist')
     return
@@ -40,48 +47,41 @@ for iSubj = 1:nbSubjects
     while length(num2str(strISubj)) < length(num2str(nbSubjects))
         strISubj = "0" + strISubj;
     end
-    fileName = sprintf('/%s_'+"%0"+eval(['length(num2str(nbSubjects))'])+"i"+'.json',jsonDataName,1);
-    pathFileName = pathJsonData + fullfile(fileName);
+    folderName = sprintf('/sub_' + string(strISubj));
+    fileName = sprintf('/sub_%s_%s_sess_1_run_1.json',string(strISubj),exp.jsonDataName);
+    pathFileName = pathJsonData + fullfile(folderName + fileName);
     data = jsondecode(fileread(pathFileName));
     
     for iCond = 1:nbCondition
-        
-        for iVI = 1:nbIndVars
-            recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).iVariables(:,iVI,iSubj)= ...
-                transpose(data.(fieldNamesConditions{iCond}).independentVariables.(fieldNamesIndVars{iVI}));
-        end
-        
-        for iVD = 1:nbDepVars
-            recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).dVariables(:,iVD,iSubj)= ...
-                transpose(data.(fieldNamesConditions{iCond}).dependentVariables.(fieldNamesDepVars{iVD}));
-        end
-        
-        if isempty(Bubbles)
-            bank = size(data.(fieldNamesConditions{iCond}).X.i,1);
-            dataMatrixX = (zeros(bank,sizeX*sizeY))>1;
-            for iXb = 1:bank
-                temp = data.(fieldNamesConditions{iCond}).X.i{iXb};
-                for iXtemp = 1:length(temp)
-                    dataMatrixX(iXb,iXtemp) = true;
-                end
+        for iBlock = 1:exp.nbBlocConditions(iCond)
+            fieldNamesBlock = genvarname(sprintf('block_%i',iBlock));
+            for iVI = 1:nbIndVars
+                recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).iVariables(iSubj,:,iVI)= ...
+                    data.(fieldNamesConditions{iCond}).independentVariables.(fieldNamesBlock).(fieldNamesIndVars{iVI});
             end
-            recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).X(:,:,iSubj) = dataMatrixX;
-        else
-            for iX = 1:nbBubbles
-                for iXsubj = 1:size(data.(fieldNamesConditions{iCond}).X.(fieldNamesBubbles{iX}).i,1)
-                    temp = data.(fieldNamesConditions{iCond}).X.(fieldNamesBubbles{iX}.i{iXsubj});
+            
+            for iVD = 1:nbDepVars
+                recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).dVariables(iSubj,:,iVD)= ...
+                    data.(fieldNamesConditions{iCond}).dependentVariables.(fieldNamesBlock).(fieldNamesDepVars{iVD});
+            end
+            
+            if isempty(fieldNamesBubbles)
+                bank = size(data.(fieldNamesConditions{iCond}).X.(fieldNamesBlock).i,1);
+                dataMatrixX = (zeros(bank,exp.sizeX*exp.sizeY))>1;
+                for iXb = 1:bank
+                    temp = data.(fieldNamesConditions{iCond}).X.(fieldNamesBlock).i(iXb);
                     for iXtemp = 1:length(temp)
-                        dataMatrixX(iX,iXsubj,iXtemp) = true;
+                        dataMatrixX(iXtemp,iXb) = true;
                     end
                 end
+                recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).X(iSubj,:,:) = dataMatrixX;
+            else
+                % plusieurs condition bubbles
             end
-            recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).X(iSubj,:,:,:)  = dataMatrixX;
         end
     end
     waitMsg = sprintf('Extracting Data\nsubject # %i / %i',iSubj,nbSubjects);
     waitbar(iSubj/nbSubjects, f ,waitMsg);
 end
-
+toc
 waitbar(1, f ,'Data Extracted');
-
-disp(recordsData)
