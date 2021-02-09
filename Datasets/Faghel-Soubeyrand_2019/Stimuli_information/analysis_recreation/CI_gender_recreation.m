@@ -79,13 +79,13 @@ end
 % average, smooth, and z-score the CIs using permuted CIs
 ci=nanmean(cis_all);
 sci=reshape(ci,img_size);
-sci=SmoothCi(sci,8);
+sci=SmoothCi(sci,5);
 
 ci_boot=nansum(cis_all_boot)/(nsubjects);
 sci_boot=reshape(ci_boot,img_size);
 sci_boot=SmoothCi(sci_boot,8);
 
-zci=(sci-nanmean(sci_boot(:)))/nanstd(sci_boot(:));
+zci=(sci-nanmean(sci_boot(:)))/nanstd(sci_boot(:)); % try to divide /sqrt(sum(filter)), try also to do to do a function for permutation distribution of null hypothesis.
 
 % show the resulting CI, indicating which features are usefull for face-sex
 % categorisation.
