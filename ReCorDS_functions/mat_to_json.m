@@ -1,9 +1,9 @@
-function mat_to_json
+% mat_to_json
 
 andrew = fullfile("C:\Users\andre\Desktop\Bacc Neuro\ProjetRecherche\recordsTemp\simon_exp_modData");
 simon = fullfile('/home/adf/faghelss/Downloads/records/simon_exp_modData');
 
-pathRawData = andrew;
+pathRawData = simon;
 
 exp = info_experience(pathRawData);
 
@@ -43,9 +43,9 @@ for iSubj = 1:nbSubjects
     for iCond = 1:nbCondition
         for iBlock = 1:exp.nbBlocConditions(iCond)
             fieldNamesBlock = genvarname(sprintf('block_%i',iBlock));
-            fileName = sprintf('/%s_%s_%i_%i.mat',exp.rawDataName, sID, iCond,iBlock);
-            pathFileName = exp.pathRawData + fullfile(fileName);
-            data = load(pathFileName);
+            fileName = sprintf('%s_%s_%i_%i.mat',exp.rawDataName, sID, iCond,iBlock);
+            pathFileName = fullfile(pathRawData,fileName); %Andrew : c'est comme ça qu'on utlise le fullfile.pas de / dans les noms des fichiers.
+            data = load(pathFileName); 
             
             for iSI = 1:nbSubjInfo
                 expData.subjectInformation.(fieldNamesSubjInfo{iSI}) = s{iSI};
@@ -74,7 +74,7 @@ for iSubj = 1:nbSubjects
         end
     end
 
-    %%%%% cd(pathRawData+'/json')
+
     strISubj = num2str(iSubj);
     while length(num2str(strISubj)) < length(num2str(nbSubjects))
         strISubj = "0" + strISubj;

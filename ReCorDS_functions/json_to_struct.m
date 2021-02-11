@@ -4,12 +4,12 @@ tic
 andrew = fullfile("C:\Users\andre\Desktop\Bacc Neuro\ProjetRecherche\recordsTemp\simon_exp_modData");
 simon = fullfile('/home/adf/faghelss/Downloads/records/simon_exp_modData');
 
-pathRawData = andrew;
+pathRawData = simon;
 
 exp = info_experience(pathRawData);
 
 %% creation variables
-nameExperience = genvarname(exp.expName);
+nameExperiment = genvarname(exp.expName);
 
 nbCondition = size(exp.conditions,2);
 fieldNamesConditions = genvarname(exp.conditions);
@@ -26,7 +26,7 @@ fieldNamesDepVars = genvarname(exp.depVars);
 nbBubbles = size(exp.bubbles,2);
 fieldNamesBubbles = genvarname(exp.bubbles);
 
-%% Demographie
+%% Demographic info
 subjects = info_subjects;
 nbSubjects = length(subjects);
 
@@ -56,12 +56,12 @@ for iSubj = 1:nbSubjects
         for iBlock = 1:exp.nbBlocConditions(iCond)
             fieldNamesBlock = genvarname(sprintf('block_%i',iBlock));
             for iVI = 1:nbIndVars
-                recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).iVariables(iSubj,:,iVI)= ...
+                recordsData.(nameExperiment{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).iVariables(iSubj,:,iVI)= ...
                     data.(fieldNamesConditions{iCond}).independentVariables.(fieldNamesBlock).(fieldNamesIndVars{iVI});
             end
             
             for iVD = 1:nbDepVars
-                recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).dVariables(iSubj,:,iVD)= ...
+                recordsData.(nameExperiment{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).dVariables(iSubj,:,iVD)= ...
                     data.(fieldNamesConditions{iCond}).dependentVariables.(fieldNamesBlock).(fieldNamesDepVars{iVD});
             end
             
@@ -74,7 +74,7 @@ for iSubj = 1:nbSubjects
                         dataMatrixX(iXtemp,iXb) = true;
                     end
                 end
-                recordsData.(nameExperience{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).X(iSubj,:,:) = dataMatrixX;
+                recordsData.(nameExperiment{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).X(iSubj,:,:) = dataMatrixX;
             else
                 % plusieurs condition bubbles
             end

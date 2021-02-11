@@ -11,7 +11,7 @@ function X_blck = make_bubbles_masks_faghelsoubeyrand2019(general_dir,subject,co
 
 subjects=info_subjects;
 
-seed_type = 'rand';
+seed_type = 'rand'; % or 'rng'
 
 %Load cid per subject per block
 name        = subjects{subject}{1};
