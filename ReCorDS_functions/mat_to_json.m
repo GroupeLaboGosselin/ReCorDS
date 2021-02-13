@@ -6,7 +6,8 @@ simon = fullfile('/home/adf/faghelss/Downloads/records/simon_exp_modData');
 pathRawData = simon;
 
 exp = info_experience(pathRawData);
-
+ % change this so that we pick up the correct ReCorDS path now ( for each
+ % data sets).
 pathJsonData = exp.pathRawData+fullfile("/json");
 if ~exist(pathJsonData, 'dir')
     mkdir(pathJsonData);
@@ -40,34 +41,34 @@ for iSubj = 1:nbSubjects
     %%%%%% cd(pathRawData);
     s = subjects{iSubj};
     sID = s{1};
+    blk_count = 0;
     for iCond = 1:nbCondition
         for iBlock = 1:exp.nbBlocConditions(iCond)
+            blk_count = blk_count +1;
             fieldNamesBlock = genvarname(sprintf('block_%i',iBlock));
             fileName = sprintf('%s_%s_%i_%i.mat',exp.rawDataName, sID, iCond,iBlock);
             pathFileName = fullfile(pathRawData,fileName); %Andrew : c'est comme ça qu'on utlise le fullfile.pas de / dans les noms des fichiers.
-            data = load(pathFileName); 
+            mat = load(pathFileName); 
             
-            for iSI = 1:nbSubjInfo
-                expData.subjectInformation.(fieldNamesSubjInfo{iSI}) = s{iSI};
+            for sub = 1:nbSubjInfo
+                expData.subjectInformation.(fieldNamesSubjInfo{sub}) = s{sub};
             end
             
-            for iVI = 1:nbIndVars
-                expData.(fieldNamesConditions{iCond}).independentVariables.(fieldNamesBlock).(fieldNamesIndVars{iVI}) = data.data(:,iVI);
+            for iv = 1:nbIndVars
+                expData.block{blk_count}.independentVariables.(fieldNamesIndVars{iv}) = mat.data(:,iv);
             end
             
-            for iVD = 1:nbDepVars
-                expData.(fieldNamesConditions{iCond}).dependentVariables.(fieldNamesBlock).(fieldNamesDepVars{iVD}) = data.data(:,iVD + iVI);
+            for dv = 1:nbDepVars
+                expData.block{blk_count}.dependentVariables.(fieldNamesDepVars{dv}) = mat.data(:,exp.depVar_indices(dv));
             end
             if isempty(fieldNamesBubbles)
-                for iTests = 1:size(data.bubblesPos,1)
-                    expData.(fieldNamesConditions{iCond}).X.(fieldNamesBlock).i{iTests} = nonzeros(data.bubblesPos(iTests,:));
-                    %expData.(fieldNamesConditions{iCond}).X.j = [];
+                for iTests = 1:size(mat.bubblesPos,1)
+                    expData.block{blk_count}.X.i{iTests} = nonzeros(mat.bubblesPos(iTests,:));
                 end
             else
                 for iX = 1:nbBubbles
-                    for iTests = 1:size(data.bubblesPos,1)
-                        expData.(fieldNamesConditions{iCond}).X.(fieldNamesBubbles{iX}).i{iTests} = nonzeros(data.bubblesPos(iTests,:));
-                        %expData.(fieldNamesConditions{iCond}).X.(fieldNamesBubbles{iX}).j = [];
+                    for iTests = 1:size(mat.bubblesPos,1)
+                        expData.block{blk_count}.X.(fieldNamesBubbles{iX}).i{iTests} = nonzeros(mat.bubblesPos(iTests,:));
                     end
                 end
             end

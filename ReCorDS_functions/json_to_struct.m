@@ -1,10 +1,9 @@
-function recordsData = json_to_struct
+function recordsData = json_to_struct(pathRawData,which_subjects)
 tic
 %% Importation condition experience
-andrew = fullfile("C:\Users\andre\Desktop\Bacc Neuro\ProjetRecherche\recordsTemp\simon_exp_modData");
-simon = fullfile('/home/adf/faghelss/Downloads/records/simon_exp_modData');
 
-pathRawData = simon;
+% initialize  the correct path ( within the records folder; must be
+% generalizable).
 
 exp = info_experience(pathRawData);
 
@@ -13,9 +12,6 @@ nameExperiment = genvarname(exp.expName);
 
 nbCondition = size(exp.conditions,2);
 fieldNamesConditions = genvarname(exp.conditions);
-
-% % nbSubjInfo = size(subjInfo,2);
-% % fieldNamesSubjInfo = genvarname(experience.subjInfo);
 
 nbIndVars = size(exp.indVars,2);
 fieldNamesIndVars = genvarname(exp.indVars);
@@ -26,62 +22,80 @@ fieldNamesDepVars = genvarname(exp.depVars);
 nbBubbles = size(exp.bubbles,2);
 fieldNamesBubbles = genvarname(exp.bubbles);
 
+
 %% Demographic info
-subjects = info_subjects;
-nbSubjects = length(subjects);
 
-pathJsonData = exp.pathRawData+fullfile("/json");
-if ~exist(pathJsonData, 'dir')
-    msgbox('json files do not exist')
-    return
+ntrials    = exp.ntrials_block;
+
+if ischar(which_subjects)
+    if strcmp(which_subjects,'all')
+        subjects = info_subjects;
+        nbSubjects = length(subjects);
+        which_subjects = 1:nbSubjects;
+    end
+else
+    nbSubjects = length(which_subjects);
 end
-%%%%%%%%cd(pathRawData+'/json');
 
-%% loading bar
-f = waitbar(0,'Extracting Data');
+%% initialize structures 
+clear recordsData
+
+% this reduces the memory load from a factor of four, and accelerates
+% greatly the function
+for iBlock = 1:length(exp.condition_indexes)
+    recordsData.(nameExperiment{1}).block(iBlock).X = zeros(nbSubjects,ntrials,exp.dimensions(1)*exp.dimensions(2))>0;
+end
 
 %% import data
 
-for iSubj = 1:nbSubjects
-    strISubj = num2str(iSubj);
-    while length(num2str(strISubj)) < length(num2str(nbSubjects))
-        strISubj = "0" + strISubj;
-    end
-    folderName = sprintf('/sub_' + string(strISubj));
-    fileName = sprintf('/sub_%s_%s_sess_1_run_1.json',string(strISubj),exp.jsonDataName);
-    pathFileName = pathJsonData + fullfile(folderName + fileName);
-    data = jsondecode(fileread(pathFileName));
+
+
+    % loading bar
+f = waitbar(0,'Extracting Data');
+
+for iSubj = which_subjects
+    folderName = sprintf('/sub_%03d', iSubj);
+    fileName = sprintf('/sub_%03d_%s_sess_1_run_1.json',iSubj,exp.jsonDataName);
+    pathFileName = fullfile(exp.pathRawData, folderName, fileName);
     
-    for iCond = 1:nbCondition
-        for iBlock = 1:exp.nbBlocConditions(iCond)
-            fieldNamesBlock = genvarname(sprintf('block_%i',iBlock));
+    if ~exist(pathFileName, 'file')
+    error(sprintf('json files do not exist for subject %03d',iSubj))
+    end
+    
+    data = jsondecode(fileread(pathFileName));
+
+       for iBlock = 1:length(exp.condition_indexes)
+           
             for iVI = 1:nbIndVars
-                recordsData.(nameExperiment{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).iVariables(iSubj,:,iVI)= ...
-                    data.(fieldNamesConditions{iCond}).independentVariables.(fieldNamesBlock).(fieldNamesIndVars{iVI});
+                recordsData.(nameExperiment{1}).block(iBlock).iVariables(iSubj,:,iVI)= ...
+                    data.block(iBlock).independentVariables.(fieldNamesIndVars{iVI});
             end
             
             for iVD = 1:nbDepVars
-                recordsData.(nameExperiment{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).dVariables(iSubj,:,iVD)= ...
-                    data.(fieldNamesConditions{iCond}).dependentVariables.(fieldNamesBlock).(fieldNamesDepVars{iVD});
+                 recordsData.(nameExperiment{1}).block(iBlock).dVariables(iSubj,:,iVD)= ...
+                    data.block(iBlock).dependentVariables.(fieldNamesDepVars{iVD});
             end
             
             if isempty(fieldNamesBubbles)
-                bank = size(data.(fieldNamesConditions{iCond}).X.(fieldNamesBlock).i,1);
-                dataMatrixX = (zeros(bank,exp.sizeX*exp.sizeY))>1;
-                for iXb = 1:bank
-                    temp = data.(fieldNamesConditions{iCond}).X.(fieldNamesBlock).i(iXb);
+                
+                ntrials = size(data.block(iBlock).X.i,1);
+                data_X = (zeros(ntrials,exp.dimensions(1)*exp.dimensions(2)))>0;
+                
+                for trial = 1:ntrials
+                    temp = data.block(iBlock).X.i(trial);
                     for iXtemp = 1:length(temp)
-                        dataMatrixX(iXtemp,iXb) = true;
+                        data_X(trial,temp{iXtemp}) = true;
                     end
                 end
-                recordsData.(nameExperiment{1}).(fieldNamesConditions{iCond}).(fieldNamesBlock).X(iSubj,:,:) = dataMatrixX;
+                
+                recordsData.(nameExperiment{1}).block(iBlock).X(iSubj,:,:) = data_X;
             else
                 % plusieurs condition bubbles
             end
-        end
-    end
+       end
     waitMsg = sprintf('Extracting Data\nsubject # %i / %i',iSubj,nbSubjects);
     waitbar(iSubj/nbSubjects, f ,waitMsg);
 end
 toc
 waitbar(1, f ,'Data Extracted');
+delete(f)
