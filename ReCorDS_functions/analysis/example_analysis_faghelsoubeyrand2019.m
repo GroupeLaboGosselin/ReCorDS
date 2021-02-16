@@ -5,6 +5,7 @@
 path_to_records = '~/CharestLab/ReCorDS/';
 path_to_faghel2019 = fullfile(path_to_records,'datasets/Faghel-Soubeyrand_2019');
 path_to_anaysis =fullfile(path_to_faghel2019,'/analysis');
+path_facestim    = fullfile(path_to_faghel2019,'/Stimuli_information/original_stimuli_images');
 
 % ReCorDS general functions (not specific to the dataset).
 addpath(fullfile(path_to_records,'/ReCorDS_functions'))
@@ -13,12 +14,12 @@ addpath(fullfile(path_to_records,'/ReCorDS_functions/analysis'))
 % analysis specific to the dataset
 cd(path_to_anaysis)
 
-% 
 path_raw_data  = path_to_faghel2019;
 
+% initialize info and experiment useful info : we use info_exper
 subjects=info_subjects;
 nb_participants = length(subjects);
-exp_info = info_experience(path_raw_data); % change simi2target et trial reward ( dans depVariables), en fait, l'enlever.
+exp_info = info_experiment(path_raw_data);
 
 
 % loading rcds data set, can choose either 'all' or specific subjects (e.g. 1:20) 
@@ -30,34 +31,41 @@ which_dv = 'accuracy'; % can see what we have from the field exp_info.depVars
 dim_mask_stdize = 'trial';
 sigma = 8;
 
-
 % itinialize  CI var
 all_cis_blck = zeros(exp_info.nbBlocConditions(1),exp_info.dimensions(1),exp_info.dimensions(2));
+which_phase_blocks = find(exp_info.condition_indexes==1);
 
-for blck = 1:exp_info.nbBlocConditions(1)
-    blck
+for blck = which_phase_blocks
+    
 struc = rcds_data.Faghel_Soubeyrand_2019.block(blck);
 
 [zX,zY] = rcds_stdize(struc,exp_info,dim_mask_stdize,which_dv);
 
 [CIs] = rcds_make_ci(zX,zY,which_subjects);
 
+mCI = sum(CIs)/sqrt(nb_participants); % we combine the individual CIs (stdized).
+mCI = reshape(mCI,[exp_info.dimensions(1) exp_info.dimensions(2)]); % we reshape the CI to it's original (interpretable) format, using predefined exp_info.dimensions.
 
-mCI = sum(CIs)/sqrt(nb_participants);
-mCI = reshape(mCI,[exp_info.dimensions(1) exp_info.dimensions(2)]);
+[zsCI] = rcds_CI_smooth_stdize(mCI,sigma);
 
+all_cis_blck(blck,:,:)= zsCI;
 
-[smCI, kernel] = SmoothCi(mCI, sigma);
-
-zsmCI = smCI/sqrt(sum(kernel(:).^2));
-
-all_cis_blck(blck,:,:)= zsmCI;
 end
 
 ci_show = squeeze(sum(all_cis_blck)/sqrt(3));
-figure, imagesc(ci_show),colorbar
 
 
-%%
-% SmoothCI(mCI, sigma)/sqrt(sum(kernel.^2)))).
+% load a face stimulus, for showing purposes.
+stim=113;
+stims=dir(fullfile(path_facestim ,'*/*.tif'));
+face_file=fullfile(stims(stim).folder,stims(stim).name);
+face_show=double(imread(face_file))/255;
+face_show=squeeze(face_show(:,:,1));
 
+
+zTresh_ptest = 4;
+
+[ci_show, thresholded] = overlay_pixel(face_show,ci_show,zTresh_ptest);
+
+figure, subplot(1,2,1),imshow(ci_show),title('CI for sex categorisation')
+subplot(1,2,2),imshow(thresholded),title('thresholded CI')

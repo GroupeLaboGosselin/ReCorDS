@@ -23,7 +23,7 @@ function [stdized_X,stdized_Y] = rcds_stdize(dataset_struc,exp_info,xdim_type,yd
 % author : S. Faghel-Soubeyrand, February 2021
 %
 
-index_y  = find(contains(exp_info.depVars,ydim_type));
+index_y  = contains(exp_info.depVars,ydim_type);
 
 n_subj           = size(dataset_struc.X,1);
 searchspace_size = size(dataset_struc.X,3);
@@ -38,10 +38,8 @@ switch xdim_type
 end
 
 
-
-
-
 stdized_X        = nan(size(dataset_struc.X));
+stdized_Y        = nan(size(dataset_struc.X,1),size(dataset_struc.X,2));
 
 for sub = 1:n_subj
     tmp_sub_X = squeeze(dataset_struc.X(sub,:,:));

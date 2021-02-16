@@ -27,7 +27,7 @@ im = stretch(double(im));
 if z==1
     im = repmat(im,[1 1 3]); %if not, make it 3D
 end
-%zscores = sameSize(im, varargin{2}); %Make it the same size as im (x- y- dimensions only)
+
 zscores  = varargin{2};
 threshold = 0;
 ndimT = 1;

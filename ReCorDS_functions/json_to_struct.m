@@ -5,7 +5,7 @@ tic
 % initialize  the correct path ( within the records folder; must be
 % generalizable).
 
-exp = info_experience(pathRawData);
+exp = info_experiment(pathRawData);
 
 %% creation variables
 nameExperiment = genvarname(exp.expName);
