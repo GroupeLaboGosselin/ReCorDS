@@ -28,7 +28,7 @@ rcds_data = json_to_struct(path_raw_data ,which_subjects); % enlever un field in
 
 % analysis variables 
 which_dv = 'accuracy'; % can see what we have from the field exp_info.depVars
-dim_mask_stdize = 'trial';
+dim_mask_stdize = 'pixel';
 sigma = 8;
 
 % itinialize  CI var
@@ -39,21 +39,18 @@ for blck = which_phase_blocks
     
 struc = rcds_data.Faghel_Soubeyrand_2019.block(blck);
 
-[zX,zY] = rcds_stdize(struc,exp_info,dim_mask_stdize,which_dv);
+[CIs] = rcds_make_ci(struc,exp_info,sigma); % makes the Cis per participant
 
-[CIs] = rcds_make_ci(zX,zY,which_subjects);
-
-mCI = sum(CIs)/sqrt(nb_participants); % we combine the individual CIs (stdized).
-mCI = reshape(mCI,[exp_info.dimensions(1) exp_info.dimensions(2)]); % we reshape the CI to it's original (interpretable) format, using predefined exp_info.dimensions.
-
-[zsCI] = rcds_CI_smooth_stdize(mCI,sigma);
+mCI = sum(CIs)/sqrt(nb_participants); % we combine the individual CIs (stdized, so sum/sqrt).
+mCI = reshape(mCI,[exp_info.dimensions(1) exp_info.dimensions(2)]); % we reshape the CI to it's original (image) format, using predefined exp_info.dimensions.
+ 
+[zsCI] = rcds_ci_smooth_standardize(mCI,sigma); % we smooth and standardize the avg CI
 
 all_cis_blck(blck,:,:)= zsCI;
 
 end
 
-ci_show = squeeze(sum(all_cis_blck)/sqrt(3));
-
+ci_sum = squeeze(sum(all_cis_blck)/sqrt(3));
 
 % load a face stimulus, for showing purposes.
 stim=113;
@@ -63,9 +60,9 @@ face_show=double(imread(face_file))/255;
 face_show=squeeze(face_show(:,:,1));
 
 
-zTresh_ptest = 4;
+zTresh_ptest = 8;
 
-[ci_show, thresholded] = overlay_pixel(face_show,ci_show,zTresh_ptest);
+[ci_show, thresholded] = overlay_pixel(face_show,ci_sum,zTresh_ptest);
 
 figure, subplot(1,2,1),imshow(ci_show),title('CI for sex categorisation')
 subplot(1,2,2),imshow(thresholded),title('thresholded CI')
