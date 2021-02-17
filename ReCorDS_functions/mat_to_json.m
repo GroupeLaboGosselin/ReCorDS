@@ -47,7 +47,7 @@ for iSubj = 1:nbSubjects
             blk_count = blk_count +1;
             fieldNamesBlock = genvarname(sprintf('block_%i',iBlock));
             fileName = sprintf('%s_%s_%i_%i.mat',exp.rawDataName, sID, iCond,iBlock);
-            pathFileName = fullfile(pathRawData,fileName); %Andrew : c'est comme ça qu'on utlise le fullfile.pas de / dans les noms des fichiers.
+            pathFileName = fullfile(pathRawData,fileName);
             mat = load(pathFileName); 
             
             for sub = 1:nbSubjInfo

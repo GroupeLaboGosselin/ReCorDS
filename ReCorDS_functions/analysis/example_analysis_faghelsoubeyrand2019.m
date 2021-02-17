@@ -7,7 +7,8 @@ path_to_faghel2019 = fullfile(path_to_records,'datasets/Faghel-Soubeyrand_2019')
 path_to_anaysis =fullfile(path_to_faghel2019,'/analysis');
 path_facestim    = fullfile(path_to_faghel2019,'/Stimuli_information/original_stimuli_images');
 
-% ReCorDS general functions (not specific to the dataset).
+% ReCorDS general functions (not specific to the dataset). REMEMBER TO ADD
+% A FUNCTION : rcds_initialize.m .
 addpath(fullfile(path_to_records,'/ReCorDS_functions'))
 addpath(fullfile(path_to_records,'/ReCorDS_functions/analysis'))
 
@@ -32,8 +33,9 @@ dim_mask_stdize = 'pixel';
 sigma = 8;
 
 % itinialize  CI var
-all_cis_blck = zeros(exp_info.nbBlocConditions(1),exp_info.dimensions(1),exp_info.dimensions(2));
-which_phase_blocks = find(exp_info.condition_indexes==1);
+all_cis_blck       = zeros(exp_info.nbBlocConditions(1),exp_info.dimensions(1),exp_info.dimensions(2));
+phase              = 1;
+which_phase_blocks = find(exp_info.condition_indexes==phase);
 
 for blck = which_phase_blocks
     

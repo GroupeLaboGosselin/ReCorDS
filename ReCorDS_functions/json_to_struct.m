@@ -10,9 +10,6 @@ exp = info_experiment(pathRawData);
 %% creation variables
 nameExperiment = genvarname(exp.expName);
 
-nbCondition = size(exp.conditions,2);
-fieldNamesConditions = genvarname(exp.conditions);
-
 nbIndVars = size(exp.indVars,2);
 fieldNamesIndVars = genvarname(exp.indVars);
 
@@ -45,6 +42,8 @@ clear recordsData
 for iBlock = 1:length(exp.condition_indexes)
     recordsData.(nameExperiment{1}).block(iBlock).X = zeros(nbSubjects,ntrials,exp.dimensions(1)*exp.dimensions(2))>0;
 end
+
+% % add initialization for dvs and ivs
 
 %% import data
 
